@@ -3,18 +3,7 @@
 import numpy as np
 import scipy.linalg
 import matplotlib.pyplot as plt
-
-def dlqr(A,B,Q,R):
-    """
-    Solve the discrete time lqr controller.
-    x[k+1] = A x[k] + B u[k]
-    cost = sum x[k].T*Q*x[k] + u[k].T*R*u[k]
-    """
-    # first, solve the ricatti equation
-    P = np.matrix(scipy.linalg.solve_discrete_are(A, B, Q, R))
-    # compute the LQR gain
-    K = np.matrix(scipy.linalg.inv(B.T*P*B+R)*(B.T*P*A))
-    return -K
+from lqr_methods import lqr, dlqr
 
 l = .22 # rod length is 2l
 m = (2*l)*(.006**2)*(3.14/4)*7856 # rod 6 mm diameter, 44cm length, 7856 kg/m^3
@@ -32,7 +21,7 @@ Q = np.matrix("1 0 0 0; 0 .0001 0 0 ; 0 0 1 0; 0 0 0 .0001")
 R = np.matrix(".0005")
 
 
-K = dlqr(A,B,Q,R)
+K, P, eigVals = dlqr(A,B,Q,R)
 print(K)
 print("double c[] = {%f, %f, %f, %f};" % (K[0,0], K[0,1], K[0,2], K[0,3]))
 
@@ -45,7 +34,7 @@ T = []
 U = []
 
 for t in time:
-    uk = K*xk
+    uk = -K*xk
     X.append(xk[0,0])
     T.append(xk[2,0])
     v = xk[1,0]
