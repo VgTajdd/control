@@ -8,12 +8,12 @@ from lqr_methods import lqr
 np.set_printoptions(precision=3)
 
 # Define the parameters
-m0 = 1.5
-m1 = 0.5
-m2 = 0.75
-L1 = 0.5
-L2 = 0.75
-g  = 9.81
+m0 = 2.0
+m1 = 2.5
+m2 = 2.5
+L1 = 5
+L2 = 5
+g  = 10
 
 # Pendulum 2 Inertia
 R1 = L1
@@ -64,7 +64,7 @@ print("eig(A) = ", eigVals)
 print("A = ", A)
 print("B = ", B)
 
-Q = np.diag([0.001,0.01,0.1,1,1,1])
+Q = np.diag([0.01,0.01,0.1,1,1,1])
 R = np.diag([0.001])
 
 K, P, eigVals = lqr(A,B,Q,R)
@@ -73,11 +73,12 @@ print("K = ", K)
 print("eig(A-BK) = ", eigVals)
 
 dt = 0.01
-nsteps = 500
+nsteps = 6000
 total_time = nsteps*dt
 
 time_array = np.linspace(0, nsteps*dt, nsteps, endpoint=True)
-xk = np.matrix("0;0.1;0;0;0;0")
+xk0 = [0, 0, 10*3.14/180, 0, 0, 0]
+xk = np.matrix(xk0).T
 
 X = []
 T = []
@@ -93,14 +94,14 @@ for t in time_array:
         xk += dxk*dt
 
     uk = -K*xk
-    #X.append(xk[0,0])
-    T.append(xk[1,0])
-    U.append(xk[2,0])
+    X.append(xk[0,0])
+    T.append(xk[1,0]*(180.0/3.14))
+    U.append(xk[2,0]*(180.0/3.14))
     dxk = A*xk + B*uk
 
-#plt.plot(time, X, label="cart position, meters")
-plt.plot(time_array, T, label='pendulum angle1, radians')
-plt.plot(time_array, U, label='pendulum angle2, radians')
+plt.plot(time_array, X, label="cart position")
+plt.plot(time_array, T, label='angle1')
+plt.plot(time_array, U, label='angle2')
 plt.legend(loc='upper right')
 plt.grid()
 plt.show()
