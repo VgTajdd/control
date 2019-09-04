@@ -3,7 +3,7 @@
 import numpy as np
 import scipy.linalg
 import matplotlib.pyplot as plt
-from lqr_methods import lqr, dlqr
+from lqr_methods import lqr
 
 np.set_printoptions(precision=3)
 
@@ -32,7 +32,6 @@ h5 = m2*(L2/2)*L1
 h6 = m2*(L2/2)*(L2/2) + I2
 h7 = m1*(L1/2)*g + m2*L1*g
 h8 = m2*(L2/2)*g
-dt = 0.02
 a1 = (0.5*m1+m2)*L1
 a2 = 0.5*m2*L2
 a3 = ((1/3)*m1+m2)*L1*L1
