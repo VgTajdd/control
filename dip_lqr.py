@@ -80,9 +80,9 @@ time_array = np.linspace(0, nsteps*dt, nsteps, endpoint=True)
 xk0 = [0, 0, 10*3.14/180, 0, 0, 0]
 xk = np.matrix(xk0).T
 
-X = []
-T = []
-U = []
+X0 = []
+X1 = []
+X2 = []
 
 firstTime = True
 dxk = []
@@ -94,14 +94,22 @@ for t in time_array:
         xk += dxk*dt
 
     uk = -K*xk
-    X.append(xk[0,0])
-    T.append(xk[1,0]*(180.0/3.14))
-    U.append(xk[2,0]*(180.0/3.14))
+    X0.append(xk[0,0])
+    X1.append(xk[1,0]*(180.0/3.14))
+    X2.append(xk[2,0]*(180.0/3.14))
     dxk = A*xk + B*uk
 
-plt.plot(time_array, X, label="cart position")
-plt.plot(time_array, T, label='angle1')
-plt.plot(time_array, U, label='angle2')
-plt.legend(loc='upper right')
-plt.grid()
+listofzeros = [0] * len(time_array)
+
+plt.figure()
+plt.subplot(311)
+plt.plot(time_array, listofzeros, 'r--', time_array, X1)
+plt.ylabel('angle 1')
+plt.subplot(312)
+plt.plot(time_array, listofzeros, 'r--', time_array, X2)
+plt.ylabel('angle 2')
+plt.subplot(313)
+plt.plot(time_array, listofzeros, 'r--', time_array, X0)
+plt.ylabel('position')
+plt.xlabel('time(sec)')
 plt.show()
