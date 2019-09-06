@@ -13,14 +13,14 @@ def lqr(A,B,Q,R):
     #ref Bertsekas, p.151
 
     #first, try to solve the ricatti equation
-    X = np.matrix(scipy.linalg.solve_continuous_are(A, B, Q, R))
+    P = np.matrix(scipy.linalg.solve_continuous_are(A, B, Q, R))
 
     #compute the LQR gain
-    K = np.matrix(scipy.linalg.inv(R)*(B.T*X))
+    K = np.matrix(scipy.linalg.inv(R)*(B.T*P))
 
     eigVals, eigVecs = scipy.linalg.eig(A-B*K)
 
-    return K, X, eigVals
+    return K, P, eigVals
 
 def dlqr(A,B,Q,R):
     """Solve the discrete time lqr controller.
@@ -32,11 +32,11 @@ def dlqr(A,B,Q,R):
     #ref Bertsekas, p.151
 
     #first, try to solve the ricatti equation
-    X = np.matrix(scipy.linalg.solve_discrete_are(A, B, Q, R))
+    P = np.matrix(scipy.linalg.solve_discrete_are(A, B, Q, R))
 
     #compute the LQR gain
-    K = np.matrix(scipy.linalg.inv(B.T*X*B+R)*(B.T*X*A))
+    K = np.matrix(scipy.linalg.inv(B.T*P*B+R)*(B.T*P*A))
 
     eigVals, eigVecs = scipy.linalg.eig(A-B*K)
 
-    return K, X, eigVals
+    return K, P, eigVals
