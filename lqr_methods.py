@@ -10,12 +10,12 @@ def lqr(A,B,Q,R):
 
     cost = integral x.T*Q*x + u.T*R*u
     """
-    #ref Bertsekas, p.151
+    # Ref Bertsekas, p.151
 
-    #first, try to solve the ricatti equation
+    # First, try to solve the riccati equation.
     P = np.matrix(scipy.linalg.solve_continuous_are(A, B, Q, R))
 
-    #compute the LQR gain
+    # Compute the LQR gain.
     K = np.matrix(scipy.linalg.inv(R)*(B.T*P))
 
     eigVals, eigVecs = scipy.linalg.eig(A-B*K)
@@ -29,12 +29,12 @@ def dlqr(A,B,Q,R):
 
     cost = sum x[k].T*Q*x[k] + u[k].T*R*u[k]
     """
-    #ref Bertsekas, p.151
+    # Ref Bertsekas, p.151
 
-    #first, try to solve the ricatti equation
+    # First, try to solve the riccati equation.
     P = np.matrix(scipy.linalg.solve_discrete_are(A, B, Q, R))
 
-    #compute the LQR gain
+    # Compute the LQR gain.
     K = np.matrix(scipy.linalg.inv(B.T*P*B+R)*(B.T*P*A))
 
     eigVals, eigVecs = scipy.linalg.eig(A-B*K)
