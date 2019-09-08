@@ -64,8 +64,8 @@ print("eig(A) = ", eigVals)
 print("A = ", A)
 print("B = ", B)
 
-Q = np.diag([0.01,0.01,0.1,1,1,1])
-R = np.diag([0.001])
+Q = np.diag([5, 50, 50, 20, 500, 500])
+R = np.diag([1])
 
 K, P, eigVals = lqr(A,B,Q,R)
 
